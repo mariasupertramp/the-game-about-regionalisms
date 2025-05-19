@@ -3,7 +3,7 @@ from json import loads, dumps
 import random
 
 
-data = pd.read_csv("регионализмы_разделённые.tsv", sep='\t')
+data = pd.read_json("local_words.json", orient="records")
 tojson = data.to_json(orient="records")
 parsed = loads(tojson)
 lst = []
