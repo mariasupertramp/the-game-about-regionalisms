@@ -8,7 +8,6 @@ tojson = data.to_json(orient="records")
 parsed = loads(tojson)
 lst = []
 for line in parsed:
-    print(line)
     lst.append(line)
 rounds = 0
 while rounds != 10 and len(lst) >= 4:
