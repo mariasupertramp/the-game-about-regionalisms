@@ -1,5 +1,5 @@
-selenium
-webdriver-manager
-pytelegrambotapi
-python-dotenv
-pandas
+selenium==4.32.0
+webdriver-manager==4.0.2
+pyTelegramBotAPI==4.27.0
+python-dotenv==1.1.0
+pandas==2.2.3
