@@ -57,6 +57,7 @@ parsed = loads(tojson)
 lst = []
 for line in parsed:
     lst.append(line)
+game = {}
 
 
 @botik.message_handler(commands=['start'])
@@ -129,7 +130,13 @@ def call_black(call):
 def new_round(chat_id):
     user_data = game[chat_id]
     if user_data['rounds'] >= 10 or len(words) < 4:
-        botik.send_message(chat_id, f"Всё! Конец. Вот сколько очков мы тебе насчитали: {user_data['gamepoints']}/10.")
+        markup = types.InlineKeyboardMarkup()
+        restart_btn = types.InlineKeyboardButton("Хочу поиграть ещё 🔁", callback_data='startgame')
+        goodbye_btn = types.InlineKeyboardButton("До свидания!!", callback_data='goodbye')
+        markup.add(restart_btn, goodbye_btn)
+        botik.send_message(chat_id,
+                           f"Всё! Конец. Вот сколько очков мы тебе насчитали: {user_data['gamepoints']}/10.\n\nМожет, ещё разок?",
+                           reply_markup=markup)
         return
     choices = []
     user_data['rounds'] += 1
