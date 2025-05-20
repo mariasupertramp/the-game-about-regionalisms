@@ -77,7 +77,6 @@ def call_black(call):
 
         n = random.randint(0, len(lst) - 1)
         word = (lst[n])['word']
-        botik.send_message(call.message.chat.id, f"Как думаешь, что значит слово: <b>{word}</b>?", parse_mode='html')
 
         vallist = []
         correct = (lst[n])['meaning']
