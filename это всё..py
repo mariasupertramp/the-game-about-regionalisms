@@ -68,17 +68,36 @@ def main(message):
 @botik.callback_query_handler(func=lambda call: True)
 def call_black(call):
     if call.data == 'startgame':
-        botik.send_message(call.message.chat.id, "Запускаю игру!")
-    elif call.data == 'rules':
         markup = types.InlineKeyboardMarkup()
-        com1 = types.InlineKeyboardButton("Начать угадывать", callback_data='startgame')
-        com3 = types.InlineKeyboardButton("До свидания", callback_data='goodbye')
-        markup.add(com1,com3)
-        botik.send_message(call.message.chat.id, "Правила игры:\n 1. Тебе рандомно выпадут слово-регионализм и 4 варианта ответа"
-                                                 " – возможные значения этого слова.\n 2. У тебя будет три попытки угадать значение "
-                                                 "слова.\n 3. Когда отгадаешь значения или у тебя закончатся попытки, ты получишь пример употребления регионализма и "
-                                                 "место его распространения,.\n 4. В любой момент ты можешь завершить игру, нажав "
-                                                 "“До свидания”.\n", reply_markup=markup)
+        points = 0
+        botik.send_message(call.message.chat.id, "Запускаю игру!")
+
+        n = random.randint(0, len(lst) - 1)
+        word = (lst[n])['word']
+        botik.send_message(call.message.chat.id, f"Как думаешь, что значит слово: <b>{word}</b>?", parse_mode='html')
+
+        vallist = []
+        correct = (lst[n])['meaning']
+        vallist.append(correct)
+        lst.remove(lst[n])
+
+        count = 0
+        while count != 3:
+            n = random.randint(0, len(lst) - 1)
+            val = (lst[n])['meaning']
+            if val not in vallist:
+                vallist.append(val)
+                count += 1
+
+        random.shuffle(vallist)
+
+        markup.add(types.InlineKeyboardButton(vallist[0], callback_data='var1'))
+        markup.add(types.InlineKeyboardButton(vallist[1], callback_data='var2'))
+        markup.add(types.InlineKeyboardButton(vallist[2], callback_data='var3'))
+        markup.add(types.InlineKeyboardButton(vallist[3], callback_data='var4'))
+
+        botik.send_message(call.message.chat.id, "Выбери правильный вариант:", reply_markup=markup)
+
 
     elif call.data == 'goodbye':
         botik.send_message(call.message.chat.id, "Хорошего дня! Приходи, когда надумаешь играть \U0001F609")
