@@ -58,7 +58,7 @@ def main(message):
     com1 = types.InlineKeyboardButton("Начать угадывать", callback_data='startgame')
     com2 = types.InlineKeyboardButton("Правила игры", callback_data='rules')
     com3 = types.InlineKeyboardButton("До свидания", callback_data='goodbye')
-    com4 = types.InlineKeyboardButton("Сайт-источник", callback_data='site')
+    com4 = types.InlineKeyboardButton("Сайт-источник", url='https://yandex.ru/company/researches/2021/local-words')
     markup.add(com1, com2, com3, com4)
     botik.send_message(message.chat.id,f'Привет, {message.from_user.first_name}. Это бот для игры-угадайки регионализмов. '
                                        f'Испытай свое лингвистическое чутье и попробуй определить, какое из значений верное. '
@@ -103,9 +103,21 @@ def call_black(call):
 
         botik.send_message(call.message.chat.id, "Выбери номер ответа:", reply_markup=markup)
 
-
+    elif call.data == 'rules':
+        markup = types.InlineKeyboardMarkup()
+        com1 = types.InlineKeyboardButton("Начать угадывать", callback_data='startgame')
+        com3 = types.InlineKeyboardButton("До свидания", callback_data='goodbye')
+        markup.add(com1,com3)
+        botik.send_message(call.message.chat.id, "Правила игры:\n 1. В игре 10 раундов, за каждый из "
+                                                 "которых ты можешь получить 1 балл.\n 2. Тебе рандомно выпадут "
+                                                 "слово-регионализм и 4 варианта ответа – возможные значения этого "
+                                                 "слова.\n 3. У тебя будет одна попытка угадать значение слова.\n 4. "
+                                                 "Вместе с правильным ответом ты сможешь посмотреть пример употребления регионализма "
+                                                 "и место, в котором он распространен.", reply_markup=markup)
     elif call.data == 'goodbye':
         botik.send_message(call.message.chat.id, "Хорошего дня! Приходи, когда надумаешь играть \U0001F609")
-    elif call.data == 'site':
-        webbrowser.open('https://yandex.ru/company/researches/2021/local-words')
+@botik.message_handler(func=lambda message: not message.text.startswith('/'), content_types=['text'])
+def unknown_message(message):
+    botik.send_message(message.chat.id, "Извини, пока я не могу понять, что ты пишешь. "
+                                        "Используй кнопки, чтобы управлять ботом")
 botik.polling(none_stop=True)
