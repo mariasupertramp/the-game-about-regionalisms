@@ -94,12 +94,15 @@ def call_black(call):
 
         random.shuffle(vallist)
 
-        markup.add(types.InlineKeyboardButton(vallist[0], callback_data='var1'))
-        markup.add(types.InlineKeyboardButton(vallist[1], callback_data='var2'))
-        markup.add(types.InlineKeyboardButton(vallist[2], callback_data='var3'))
-        markup.add(types.InlineKeyboardButton(vallist[3], callback_data='var4'))
+        text_block = "\n".join([f"{i + 1}. {val}" for i, val in enumerate(vallist)])
+        botik.send_message(call.message.chat.id, f"Как думаешь, что означает слово <b>{word}</b>?\n\n{text_block}",
+                           parse_mode='html')
 
-        botik.send_message(call.message.chat.id, "Выбери правильный вариант:", reply_markup=markup)
+        markup = types.InlineKeyboardMarkup(row_width=4)
+        buttons = [types.InlineKeyboardButton(f"{i + 1}", callback_data=f'var{i + 1}') for i in range(4)]
+        markup.add(*buttons)
+
+        botik.send_message(call.message.chat.id, "Выбери номер ответа:", reply_markup=markup)
 
 
     elif call.data == 'goodbye':
